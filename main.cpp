@@ -1,14 +1,5 @@
 #include "shared.h"
 
-class puncti
-{
-	private:
-		double *p;
-
-	public:
-		puncti(double*);
-};
-
 class dzvector
 {
 	// dzvectors should be NO_DATA in length
@@ -19,11 +10,18 @@ class dzvector
 		dzvector();
 		dzvector(double*);
 		void output_vec();
+		double get(int i);
+		double dot_product(dzvector* vec);
 };
 
 dzvector::dzvector()
 {
+	int i;
 	x = (double *) malloc(sizeof(double) * NO_DATA);
+	for (i = 0; i < NO_DATA; i++) 
+	{
+		x[i] = 0;
+	}
 }
 
 dzvector::dzvector(double *y)
@@ -46,25 +44,28 @@ void dzvector::output_vec()
 	cout << x[NO_DATA - 1] << endl;
 }
 
-
-
-puncti::puncti(double *q)
+double dzvector::get(int i)
 {
-	int i, j;
-	
-	p = (double *) malloc(NO_DATA * 2 * sizeof(double));
-	for (i = 0; i < NO_DATA; i++)
+	return x[i];
+}
+
+double dzvector::dot_product(dzvector* vec)
+{
+	double r;
+	int i;
+	r = 0;
+	for(i = 0; i < NO_DATA; i++)
 	{
-		p[2 * i] = *(q + i * 2);
-		p[(2 * i) + 1] = *(q + i * 2 + 1);
+		r += x[i]*vec->get(i);
 	}
+	return r;
 }
 
 int main()
 {
 	int i,j;
 	dzvector *f[NO_FUNC];
-	double y[NO_DATA];
+	dzvector *y;
 
 	// fit these points to c1 + c2x + c3x^2
 	// f1 = 1 f2 = x f3 = x^2
@@ -76,25 +77,43 @@ int main()
 	// number of rows = number of points
 	// number of columns = number of dimensions
 	
-	double e[NO_DATA][NO_FUNC + 1];
+	double e[NO_FUNC][NO_DATA + 1];
 	
-	double temp[NO_DATA];
+	double t1[NO_DATA];
+	double t2[NO_DATA];
 	
-	//puncti *points;
-	//points = new puncti((double *) p);
-
+	y = new dzvector();
+	
+	for(i = 0; i < NO_DATA; i++)
+	{
+		t2[i] = p[i][1];
+	}
+	
+	y = new dzvector((double *) t2);
+	
 	for(i = 0; i < NO_FUNC; i++)
 	{
 		for(j = 0; j < NO_DATA; j++)
 		{
-			temp[j] =  pow(p[j][0],i);
+			t1[j] =  pow(p[j][0],i);
 		}
-		f[i] = new dzvector((double *) temp);
+		f[i] = new dzvector((double *) t1);
 	}
+	
+	
 	for(i = 0; i < NO_FUNC; i++)
 	{
 		cout << "f" << i << " =";
 		f[i]->output_vec();
+	}
+	
+	for(i = 0; i < NO_FUNC; i++)
+	{
+		for(j = 0; j < NO_DATA; j++)
+		{
+			e[i][j] = f[i]->dot_product(f[j]);
+		}
+		e[i][NO_DATA] = f[i]->dot_product(y);
 	}
 	return 0;
 }
