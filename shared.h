@@ -14,7 +14,7 @@
 	using namespace std; 
 
 	#define NO_DATA 4
-	#define NO_FUNC 4
+	#define NO_FUNC 3
 	
 	class dzvector
 {
