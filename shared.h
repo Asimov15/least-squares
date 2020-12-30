@@ -13,50 +13,55 @@
 	
 	using namespace std; 
 
-	#define NO_DATA 4
-	#define NO_FUNC 3
+	#define NO_DATA 10
+	#define NO_FUNC 10
 	
 	class dzvector
 {
 	// dzvectors should be NO_DATA in length
 	private:
-		double *x;
+		long double *x;
 
 	public:
 		dzvector();
-		dzvector(double*);
+		dzvector(long double*);
 		void output_vec();
-		double get(int i);
-		double dot_product(dzvector* vec);
+		long double get(int i);
+		long double dot_product(dzvector* vec);
 };
 
 	class endodatio
 	{
 		private:
-			double *solution;
+			long double *solution;
 		
 		public:
 			endodatio();
 			~endodatio();
-			void put(int, double);
-			double get(int);
+			void put(int, long double);
+			long double get(int);
 			void output();
+			void predict(int next);
 	};
 	
 	class forma
 	{
 		private: 
-			double *x;
+			long double *x;
 
 		public:
 			forma();
 			~forma();
-			forma(double**);
-			double get(int, int);
-			void put(int, int, double);
+			forma(long double**);
+			long double get(int, int);
+			void put(int, int, long double);
 			void eliminate();
 			void substitute(endodatio*);
 			void output_matrix();
 			void test_solution(endodatio*);
 	};
+	
+	std::vector<std::pair<std::string, std::vector<long double>>> read_csv(std::string );
+	void write_csv(std::string filename, std::vector<std::pair<std::string, std::vector<long double>>> );
+	
 #endif

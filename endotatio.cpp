@@ -5,20 +5,20 @@ endodatio::endodatio()
 {
 	// constructor
 	int i;
-	solution = (double *) malloc(NO_FUNC * sizeof(double));
+	solution = (long double *) malloc(NO_FUNC * sizeof(long double));
 	for(i = 0; i < NO_FUNC; i++)
 	{
 		solution[i] = 0;
 	}
 }
 
-double endodatio::get(int i)
+long double endodatio::get(int i)
 {
 	assert(i >= 0 && i < NO_FUNC);
 	return solution[i];
 }
 
-void endodatio::put(int i, double value)
+void endodatio::put(int i, long double value)
 {
 	assert(i >= 0 && i < NO_FUNC);
 	solution[i] = value;
@@ -35,6 +35,19 @@ void endodatio::output()
 
 	cout << solution[NO_FUNC - 1] << endl;
 
+}
+
+void endodatio::predict(int next)
+{
+	int i;
+	long double result;
+	result = 0;
+	for (i = 0; i < NO_FUNC - 1; i++)
+	{
+		result += solution[i]*pow(next,i);
+	}
+	cout << "Prediction: " << result << endl;
+	return;
 }
 
 endodatio::~endodatio()

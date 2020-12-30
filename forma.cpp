@@ -6,7 +6,7 @@ forma::forma()
 	int i;
 	
 	// x is a matrix holding the coefficients of the equations. The last column holds the constants
-	x = (double *) malloc((pow(NO_FUNC,2) + NO_FUNC) * sizeof(double));
+	x = (long double *) malloc((pow(NO_FUNC,2) + NO_FUNC) * sizeof(long double));
 	
 	for(i = 0; i < (pow(NO_FUNC,2) + NO_FUNC); i++)
 	{
@@ -14,12 +14,12 @@ forma::forma()
 	}
 }
 
-forma::forma(double **m)
+forma::forma(long double **m)
 {
 	// this constructor takes the address of a 2D array so that the matrix can be conviently initialized.
 	int i, j;
 	
-	x = (double *) malloc(NO_FUNC * (NO_FUNC + 1) * sizeof(double));
+	x = (long double *) malloc(NO_FUNC * (NO_FUNC + 1) * sizeof(long double));
 	for (j = 0; j < NO_FUNC; j++)
 	{
 		for (i = 0; i < NO_FUNC + 1; i++)
@@ -35,7 +35,7 @@ forma::~forma()
 	delete[] x;
 }
 
-double forma::get(int i, int j)
+long double forma::get(int i, int j)
 {
 	// return an element
 	assert(i >= 0 && i < (NO_FUNC +1));
@@ -43,7 +43,7 @@ double forma::get(int i, int j)
 	return x[j*(NO_FUNC + 1) + i]; // i = column number; j = row number
 }
 
-void forma::put(int i, int j, double value)
+void forma::put(int i, int j, long double value)
 {
 	// set an elelment
 	assert(i >= 0 && i < (NO_FUNC + 1));
@@ -55,7 +55,7 @@ void forma::eliminate()
 {
 	// forward elemination phase
 	int i, j, k, max;
-	double t;
+	long double t;
 	for (i = 0; i < NO_FUNC; i++)
 	{
 		// find max row
@@ -90,7 +90,7 @@ void forma::substitute(endodatio *c)
 {
 	// backward substitution phase
 	int j, k;
-	double t;
+	long double t;
 	for ( j = NO_FUNC - 1; j >= 0; j--)
 	{
 		t = 0.0;
@@ -105,7 +105,7 @@ void forma::substitute(endodatio *c)
 void forma::output_matrix()
 {
 	int i,j;
-	double val;
+	long double val;
 	
 	cout << endl;
 	for (j = 0; j < NO_FUNC; j++)
@@ -123,7 +123,7 @@ void forma::output_matrix()
 
 void forma::test_solution(endodatio *c)
 {
-	double result;
+	long double result;
 	cout.precision(17);
 	int i;
 	
