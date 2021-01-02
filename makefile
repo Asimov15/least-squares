@@ -1,5 +1,5 @@
 CC= g++
-CFLAGS= -std=gnu++17 -I. -g
+CFLAGS= -std=gnu++17 -I.  
 DEPS= shared.h
 
 least-squares: dzvector.o endotatio.o forma.o csv-reader.o main.o 

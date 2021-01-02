@@ -14,7 +14,7 @@
 	using namespace std; 
 
 	#define NO_DATA 10
-	#define NO_FUNC 10
+	#define NO_FUNC 3
 	
 	class dzvector
 {
@@ -59,6 +59,7 @@
 			void substitute(endodatio*);
 			void output_matrix();
 			void test_solution(endodatio*);
+			void output();
 	};
 	
 	std::vector<std::pair<std::string, std::vector<long double>>> read_csv(std::string );

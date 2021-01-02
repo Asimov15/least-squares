@@ -1,45 +1,45 @@
 #include "shared.h"
 
-std::vector<std::pair<std::string, std::vector<long double>>> read_csv(std::string filename)
+vector<pair<string, vector<long double>>> read_csv(string filename)
 {
 	// Reads a CSV file into a vector of <string, vector<int>> pairs where
 	// each pair represents <column name, column values>
 
 	// Create a vector of <string, long double vector> pairs to store the result
-	std::vector<std::pair<std::string, std::vector<long double>>> result;
+	vector<pair<string, vector<long double>>> result;
 
 	// Create an input filestream
-	std::ifstream myFile(filename);
+	ifstream myFile(filename);
 
 	// Make sure the file is open
-	if(!myFile.is_open()) throw std::runtime_error("Could not open file");
+	if(!myFile.is_open()) throw runtime_error("Could not open file");
 
 	// Helper vars
-	std::string line, colname;
+	string line, colname;
 	long double val;
 
 	// Read the column names
 	if(myFile.good())
 	{
 		// Extract the first line in the file
-		std::getline(myFile, line);
+		getline(myFile, line);
 
 		// Create a stringstream from line
-		std::stringstream ss(line);
+		stringstream ss(line);
 
 		// Extract each column name
-		while(std::getline(ss, colname, ','))
+		while(getline(ss, colname, ','))
 		{
 			// Initialize and add <colname, long double vector> pairs to result
-			result.push_back({colname, std::vector<long double> {}});
+			result.push_back({colname, vector<long double> {}});
 		}
 	}
 
 	// Read data, line by line
-	while(std::getline(myFile, line))
+	while(getline(myFile, line))
 	{
 		// Create a stringstream of the current line
-		std::stringstream ss(line);
+		stringstream ss(line);
 		
 		// Keep track of the current column index
 		int colIdx = 0;
@@ -64,16 +64,16 @@ std::vector<std::pair<std::string, std::vector<long double>>> read_csv(std::stri
 	return result;
 }
 
-void write_csv(std::string filename, std::vector<std::pair<std::string, std::vector<int>>> dataset)
+void write_csv(string filename, vector<pair<string, vector<int>>> dataset)
 {
 	// Make a CSV file with one or more columns of integer values
 	// Each column of data is represented by the pair <column name, column data>
-	//   as std::pair<std::string, std::vector<int>>
+	//   as pair<string, vector<int>>
 	// The dataset is represented as a vector of these columns
 	// Note that all columns should be the same size
 	
 	// Create an output filestream object
-	std::ofstream myFile(filename);
+	ofstream myFile(filename);
 	
 	// Send column names to the stream
 	for(int j = 0; j < dataset.size(); j++)

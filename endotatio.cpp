@@ -34,7 +34,6 @@ void endodatio::output()
 	}
 
 	cout << solution[NO_FUNC - 1] << endl;
-
 }
 
 void endodatio::predict(int next)
@@ -42,7 +41,7 @@ void endodatio::predict(int next)
 	int i;
 	long double result;
 	result = 0;
-	for (i = 0; i < NO_FUNC - 1; i++)
+	for (i = 0; i < NO_FUNC; i++)
 	{
 		result += solution[i]*pow(next,i);
 	}

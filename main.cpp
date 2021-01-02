@@ -7,7 +7,7 @@ int main()
 	dzvector *y;
 	forma *expression;
 	endodatio *b;
-	long double p[NO_DATA][2] = { {1, 5.99}, {2, 17}, {3, 34}, {4, 57.1} };
+
 	long double **equation;
 	long double t1[NO_DATA];
 	long double t2[NO_DATA];
@@ -22,43 +22,49 @@ int main()
 	// number of columns = number of dimensions
 
 	equation = new long double *[NO_FUNC];
-
+	cout.precision(17);
 	for(i = 0; i < NO_FUNC; i++)
 	{
 		equation[i] = new long double[NO_FUNC + 1];
 	}
 	
-	for(i = 0; i < 2; i++)
-	{
-		cout << test.at(i).first << "," << endl;
-	
-	}
+	// output column headers
+	cout << "Column Headers" << endl;
 	
 	for(i = 0; i < 2; i++)
 	{
-		cout << test.at(i).second.at(0) << "," << endl;
-	
+		cout << test.at(i).first << ",";
 	}
-	
-	//return 0;
-	
+
+	cout << endl;
+
+	// output data points
+
+	cout << "Data Points" << endl;
 	for(i = 0; i < NO_DATA; i++)
 	{
-		//t2[i] = p[i][1];
 		t2[i] = test.at(1).second.at(i);
-		cout << t2[i] << endl;
+		cout << test.at(0).second.at(i) << "," << t2[i] << endl;
 	}
 	
+	cout << endl;
+	
 	y = new dzvector((long double *) t2);
+	
+	cout << "y vector" << endl;
+	
+	y->output_vec();
+	
+	cout << "f vectors" << endl;
 	
 	for(i = 0; i < NO_FUNC; i++)
 	{
 		for(j = 0; j < NO_DATA; j++)
 		{
-			//t1[j] =  pow(p[j][0], i);
 			t1[j] = pow(j, i);
 		}
 		f[i] = new dzvector((long double *) t1);
+		f[i]->output_vec();
 	}
 	
 	for(i = 0; i < NO_FUNC; i++)
@@ -71,16 +77,17 @@ int main()
 	}
 
 	expression = new forma((long double **) equation);
-	//expression->output_matrix();
-	
-	b = new endodatio();
 
+	b = new endodatio();
+	cout << "The equations:" << endl;
+	expression->output();
 	expression->eliminate();
 	expression->substitute(b);
-
+	cout << "coefficients:" << endl;
 	b->output();
 	expression->test_solution(b);
 	b->predict(NO_DATA + 1);
+	cout << "Actual: " << test.at(1).second.at(NO_DATA) << endl;;
 	
 	return 0;
 }

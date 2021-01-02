@@ -146,3 +146,16 @@ void forma::test_solution(endodatio *c)
 		cout << get(NO_FUNC, 0) << endl;
 	}
 }
+
+void forma::output()
+{
+	int i,j;
+	for (j = 0; j < NO_FUNC; j++)
+	{
+		for (i = 0; i < NO_FUNC + 1; i++)
+		{
+			cout << get(i,j) << ",";
+		}
+		cout << endl;
+	}
+}
