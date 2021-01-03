@@ -51,6 +51,11 @@ void forma::put(int i, int j, long double value)
 	x[j*(NO_FUNC + 1) + i] = value;
 }
 
+void forma::initialise()
+{
+
+}
+
 void forma::eliminate()
 {
 	// forward elemination phase

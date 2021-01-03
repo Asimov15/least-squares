@@ -85,9 +85,10 @@ int main()
 	expression->substitute(b);
 	cout << "coefficients:" << endl;
 	b->output();
+	b->save_coefficents();
 	expression->test_solution(b);
 	b->predict(NO_DATA + 1);
-	cout << "Actual: " << test.at(1).second.at(NO_DATA) << endl;;
-	
+	b->save_coefficents();
+	cout << "Actual: " << test.at(1).second.at(NO_DATA) << endl;
 	return 0;
 }

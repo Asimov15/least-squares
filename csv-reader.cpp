@@ -9,20 +9,20 @@ vector<pair<string, vector<long double>>> read_csv(string filename)
 	vector<pair<string, vector<long double>>> result;
 
 	// Create an input filestream
-	ifstream myFile(filename);
+	ifstream my_file(filename);
 
 	// Make sure the file is open
-	if(!myFile.is_open()) throw runtime_error("Could not open file");
+	if(!my_file.is_open()) throw runtime_error("Could not open file");
 
 	// Helper vars
 	string line, colname;
 	long double val;
 
 	// Read the column names
-	if(myFile.good())
+	if(my_file.good())
 	{
 		// Extract the first line in the file
-		getline(myFile, line);
+		getline(my_file, line);
 
 		// Create a stringstream from line
 		stringstream ss(line);
@@ -36,7 +36,7 @@ vector<pair<string, vector<long double>>> read_csv(string filename)
 	}
 
 	// Read data, line by line
-	while(getline(myFile, line))
+	while(getline(my_file, line))
 	{
 		// Create a stringstream of the current line
 		stringstream ss(line);
@@ -59,7 +59,7 @@ vector<pair<string, vector<long double>>> read_csv(string filename)
 	}
 
 	// Close file
-	myFile.close();
+	my_file.close();
 
 	return result;
 }
@@ -73,32 +73,32 @@ void write_csv(string filename, vector<pair<string, vector<int>>> dataset)
 	// Note that all columns should be the same size
 	
 	// Create an output filestream object
-	ofstream myFile(filename);
+	ofstream my_file(filename);
 	
 	// Send column names to the stream
 	for(int j = 0; j < dataset.size(); j++)
 	{
-		myFile << dataset.at(j).first;
+		my_file << dataset.at(j).first;
 		if(j != dataset.size() - 1)
 		{
-			 myFile << ","; // No comma at end of line
+			 my_file << ","; // No comma at end of line
 		}
 	}
-	myFile << "\n";
+	my_file << "\n";
 	
 	// Send data to the stream
 	for(int i = 0; i < dataset.at(0).second.size(); i++)
 	{
 		for(int j = 0; j < dataset.size(); j++)
 		{
-			myFile << dataset.at(j).second.at(i);
+			my_file << dataset.at(j).second.at(i);
 			if(j != dataset.size() - 1)
 			{
-				 myFile << ","; // No comma at end of line
+				 my_file << ","; // No comma at end of line
 			}
 		}
-		myFile << "\n";
+		my_file << "\n";
 	}	
 	// Close the file
-	myFile.close();
+	my_file.close();
 }

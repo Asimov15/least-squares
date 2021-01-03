@@ -7,32 +7,28 @@ matplotlib.use('Agg')
 from pylab import rcParams
 rcParams['figure.figsize'] = 20, 9
 
-import argparse
-import sys
-import codecs
-import json, requests
 import matplotlib.pyplot as plt
-import matplotlib.dates as mdates
-import datetime
-import numpy as np
-from numpy import arange
-from datetime import datetime, timedelta, tzinfo, date
-from dateutil import tz
 from matplotlib import style
 import matplotlib.ticker as ticker
-
-#from matplotlib.ticker import MultipleLocator, FormatStrFormatter
-#from matplotlib.dates import DayLocator, HourLocator, DateFormatter, drange
 import csv
 import math
 
-#plt.style.use('seaborn-whitegrid')
-x = []
-y = []
-e = []
-f = []
+time_seq1 = []
+time_seq2 = []
+price_seq = []
+fit_price_seq = []
 
-with open('copper3.csv') as csv_file:
+time_index = 0.0
+price_element = 0.0
+
+with open('coefficients.csv') as csv_file:
+	reader = csv.reader(csv_file)
+	csv_reader = csv.reader(csv_file, delimiter=',')
+	for coefficients in csv_reader:
+		i = 0
+	print("number of coefficients = {0}".format(len(coefficients)))
+	
+with open('copper4.csv') as csv_file:
 	csv_reader = csv.reader(csv_file, delimiter=',')
 	line_count = 0
 
@@ -40,29 +36,29 @@ with open('copper3.csv') as csv_file:
 		if line_count == 0:
 			print('{0}'.format(", ".join(row)))
 		else:
-			print('{0}, {1}'.format(row[0], row[1]))
-			x.append(row[0])
-			y.append(row[1])
-			e1 = float(row[0])
-			e.append(3.934 + -0.0405 * e1 + 0.0135 * e1 * e1)
-#			e.append(3.9133049544519541 + -0.0077442615344973201 * e1 + 0.0001773653175627696 * e1 * e1 + -1.8125173542458588e-06 * pow(e1,3))
-#			f.append(3.90435 - 0.00614011 * e1 +  0.000121733 * e1 * e1 + -1.31661e-06 * pow(e1,3))
+			time_index = float(row[0])
+			price_element = float(row[1])
+			print('{0}, {1}'.format(time_index, price_element))
+
+			if time_index < 50.0:
+				time_seq1.append(float(time_index))
+				price_seq.append(price_element)
+
+			e1 = float(time_index)
+			fit_y = 0
+			index = 0
+			for factor in coefficients:
+				fit_y = fit_y + float(factor) * pow(e1,index)
+				index = index + 1
+			print(fit_y)
+			fit_price_seq.append(fit_y)
+			time_seq2.append(time_index)
 		line_count += 1
+		if line_count > 50:
+			break
 
 fig, ax = plt.subplots()
-
-#ax.xaxis.set_major_formatter(plt.NullFormatter())
-
-plt.plot(x, y, 'o', color='black')
-plt.plot(x, e, 'o', color='blue')
-#plt.plot(x, f, 'o', color='green')
-#ax.yaxis.set_major_locator(plt.MaxNLocator(7))
-#ax.xaxis.set_major_locator(plt.MaxNLocator(7))
-#ax.xaxis.set_major_locator(plt.LinearLocator(numticks=5))
-ax.xaxis.set_major_locator(plt.MultipleLocator(10))
-ax.yaxis.set_major_locator(plt.MultipleLocator(10))
-#ax.set_ylim(ax.get_ylim()[::-1])
-ax.set_ylim(ymin=3)
-plt.gca().invert_yaxis()
+plt.plot(time_seq1, price_seq, 'o-', color='black', label='Copper Market Data')
+plt.plot(time_seq2, fit_price_seq, 'o-', color='blue', label='Fitted Curve {0}th Degree Polynomial'.format(len(coefficients)))
+legend = ax.legend(loc='upper center', shadow=True, fontsize='x-large')
 plt.savefig("price.png")
-

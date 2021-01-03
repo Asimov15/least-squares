@@ -36,6 +36,23 @@ void endodatio::output()
 	cout << solution[NO_FUNC - 1] << endl;
 }
 
+void endodatio::save_coefficents()
+{
+	// save coefficients to a csv file
+	int i;
+	
+	ofstream my_file("coefficients.csv");
+	for (i = 0; i < NO_FUNC - 1; i++)
+	{
+		my_file << setprecision(17) << solution[i] << ",";
+	}
+
+	my_file << setprecision(17) << solution[NO_FUNC - 1] << endl;
+
+	// Close the file
+	my_file.close();
+}
+
 void endodatio::predict(int next)
 {
 	int i;
@@ -46,6 +63,7 @@ void endodatio::predict(int next)
 		result += solution[i]*pow(next,i);
 	}
 	cout << "Prediction: " << result << endl;
+	// cout << "Prediction: " << result << setprecision(17) << endl;
 	return;
 }
 

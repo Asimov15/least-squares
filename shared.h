@@ -10,11 +10,12 @@
 	#include <math.h>
 	#include <iostream>
 	#include <assert.h>
+	#include <iomanip> 
 	
 	using namespace std; 
 
-	#define NO_DATA 10
-	#define NO_FUNC 3
+	#define NO_DATA 50
+	#define NO_FUNC 21
 	
 	class dzvector
 {
@@ -42,6 +43,7 @@
 			long double get(int);
 			void output();
 			void predict(int next);
+			void save_coefficents();
 	};
 	
 	class forma
