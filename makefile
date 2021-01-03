@@ -9,4 +9,4 @@ least-squares: dzvector.o endotatio.o forma.o csv-reader.o main.o
 	$(CC) -c -o $@ $< $(CFLAGS)
 
 clean:
-	rm -f *.o core untitled least-squares a.out
+	rm -f *.o core untitled least-squares *.out *.png

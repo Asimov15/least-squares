@@ -39,7 +39,6 @@ int main()
 	cout << endl;
 
 	// output data points
-
 	cout << "Data Points" << endl;
 	for(i = 0; i < NO_DATA; i++)
 	{
