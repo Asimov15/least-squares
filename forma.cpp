@@ -5,12 +5,12 @@ forma::forma()
 	// constructor
 	int i;
 	
-	// x is a matrix holding the coefficients of the equations. The last column holds the constants
-	x = (long double *) malloc((pow(NO_FUNC,2) + NO_FUNC) * sizeof(long double));
+	// aequare is a matrix holding the coefficients of the equations. The last column holds the constants
+	aequare = (long double *) malloc((pow(NO_FUNC,2) + NO_FUNC) * sizeof(long double));
 	
 	for(i = 0; i < (pow(NO_FUNC,2) + NO_FUNC); i++)
 	{
-		x[i] = 0;
+		aequare[i] = 0;
 	}
 }
 
@@ -19,12 +19,12 @@ forma::forma(long double **m)
 	// this constructor takes the address of a 2D array so that the matrix can be conviently initialized.
 	int i, j;
 	
-	x = (long double *) malloc(NO_FUNC * (NO_FUNC + 1) * sizeof(long double));
+	aequare = (long double *) malloc(NO_FUNC * (NO_FUNC + 1) * sizeof(long double));
 	for (j = 0; j < NO_FUNC; j++)
 	{
 		for (i = 0; i < NO_FUNC + 1; i++)
 		{
-			x[j*(NO_FUNC + 1) + i] = *(*(m + j) + i);  //[row][col] j = row number; i = col number 
+			aequare[j*(NO_FUNC + 1) + i] = *(*(m + j) + i);  //[row][col] j = row number; i = col number 
 		}
 	}
 }
@@ -32,7 +32,7 @@ forma::forma(long double **m)
 forma::~forma()
 {
 	// destructor
-	delete[] x;
+	delete[] aequare;
 }
 
 long double forma::get(int i, int j)
@@ -40,7 +40,7 @@ long double forma::get(int i, int j)
 	// return an element
 	assert(i >= 0 && i < (NO_FUNC +1));
 	assert(j >= 0 && j < NO_FUNC);
-	return x[j*(NO_FUNC + 1) + i]; // i = column number; j = row number
+	return aequare[j*(NO_FUNC + 1) + i]; // i = column number; j = row number
 }
 
 void forma::put(int i, int j, long double value)
@@ -48,17 +48,83 @@ void forma::put(int i, int j, long double value)
 	// set an elelment
 	assert(i >= 0 && i < (NO_FUNC + 1));
 	assert(j >= 0 && j < NO_FUNC);
-	x[j*(NO_FUNC + 1) + i] = value;
+	aequare[j*(NO_FUNC + 1) + i] = value;
 }
 
-void forma::initialise()
+void forma::initialize()
 {
+	int i,j;
+	dzvector *f[NO_FUNC];
+	dzvector *y;
+	long double t1[NO_DATA];
+	long double t2[NO_DATA];
+	
+	std::vector<std::pair<std::string, std::vector<long double>>> csv_file = read_csv("copper4.csv");
+	
+	// fit these points to c1 + c2x + c3x^2 + ...
+	// f1 = 1 f2 = x f3 = x^2 ...
 
+	// number of rows = number of points
+	// number of columns = number of dimensions
+	
+	cout.precision(17);
+	// output column headers
+	//cout << "Column Headers" << endl;
+	
+	for(i = 0; i < 2; i++)
+	{
+		//cout << csv_file.at(i).first << ",";
+	}
+	
+	cout << endl;
+
+	// output data points
+	//cout << "Data Points" << endl;
+	for(i = 0; i < NO_DATA; i++)
+	{
+		t2[i] = csv_file.at(1).second.at(i);
+		//cout << csv_file.at(0).second.at(i) << "," << t2[i] << endl;
+	}
+	
+	cout << endl;
+	
+	y = new dzvector((long double *) t2);
+	
+	//cout << "y vector" << endl;
+	
+	//y->output_vec();
+	
+	//cout << "f vectors" << endl;
+	
+	for(i = 0; i < NO_FUNC; i++)
+	{
+		for(j = 0; j < NO_DATA; j++)
+		{
+			t1[j] = pow(j, i);
+		}
+		f[i] = new dzvector((long double *) t1);
+		//f[i]->output_vec();
+	}
+	
+	for(i = 0; i < NO_FUNC; i++)
+	{
+		for(j = 0; j < NO_FUNC; j++)
+		{
+			put(j,i, f[i]->dot_product(f[j]));
+		}
+		put(j,i, f[i]->dot_product(y));
+	}
+	for(i = 0; i < NO_FUNC; i++)
+	{
+		delete f[i];
+	}
+
+	delete y;
 }
 
 void forma::eliminate()
 {
-	// forward elemination phase
+	// forward elimination phase
 	int i, j, k, max;
 	long double t;
 	for (i = 0; i < NO_FUNC; i++)

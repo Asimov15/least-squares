@@ -2,92 +2,36 @@
 
 int main()
 {
-	int i,j;
-	dzvector *f[NO_FUNC];
-	dzvector *y;
-	forma *expression;
-	endodatio *b;
-
-	long double **equation;
-	long double t1[NO_DATA];
-	long double t2[NO_DATA];
-	std::vector<std::pair<std::string, std::vector<long double>>> test = read_csv("copper3.csv");
+	forma *expression; // object to hold matrix equation
+	endodatio *coefficient_list; // object to hold the solution which are the coefficients.	
 	
-	// fit these points to c1 + c2x + c3x^2
-	// f1 = 1 f2 = x f3 = x^2
-	// x indices go from 0 to 3 because there are 4 points.
-	// f indices go from 0 to 2 because there are 3 functions.
-
-	// number of rows = number of points
-	// number of columns = number of dimensions
-
-	equation = new long double *[NO_FUNC];
-	cout.precision(17);
-	for(i = 0; i < NO_FUNC; i++)
-	{
-		equation[i] = new long double[NO_FUNC + 1];
-	}
+	expression = new forma();
+	coefficient_list = new endodatio();
 	
-	// output column headers
-	cout << "Column Headers" << endl;
+	// construct the matrix equation using the method described on pp 551-553 of 
+	// Algorithms in C by Robert Sedgewick
+	expression->initialize();
+	//cout << "The equations:" << endl;
+	//expression->output();
 	
-	for(i = 0; i < 2; i++)
-	{
-		cout << test.at(i).first << ",";
-	}
-
-	cout << endl;
-
-	// output data points
-	cout << "Data Points" << endl;
-	for(i = 0; i < NO_DATA; i++)
-	{
-		t2[i] = test.at(1).second.at(i);
-		cout << test.at(0).second.at(i) << "," << t2[i] << endl;
-	}
-	
-	cout << endl;
-	
-	y = new dzvector((long double *) t2);
-	
-	cout << "y vector" << endl;
-	
-	y->output_vec();
-	
-	cout << "f vectors" << endl;
-	
-	for(i = 0; i < NO_FUNC; i++)
-	{
-		for(j = 0; j < NO_DATA; j++)
-		{
-			t1[j] = pow(j, i);
-		}
-		f[i] = new dzvector((long double *) t1);
-		f[i]->output_vec();
-	}
-	
-	for(i = 0; i < NO_FUNC; i++)
-	{
-		for(j = 0; j < NO_FUNC; j++)
-		{
-			equation[i][j] = f[i]->dot_product(f[j]);
-		}
-		equation[i][NO_FUNC] = f[i]->dot_product(y);
-	}
-
-	expression = new forma((long double **) equation);
-
-	b = new endodatio();
-	cout << "The equations:" << endl;
-	expression->output();
+	// Perform Gaussian Elimination using the method described on 539 of 
+	// Algorithms in C by Robert Sedgewick
 	expression->eliminate();
-	expression->substitute(b);
+	
+	// Perform Gaussian back substitution using the method described on 540 of 
+	// Algorithms in C by Robert Sedgewick
+	expression->substitute(coefficient_list);
 	cout << "coefficients:" << endl;
-	b->output();
-	b->save_coefficents();
-	expression->test_solution(b);
-	b->predict(NO_DATA + 1);
-	b->save_coefficents();
-	cout << "Actual: " << test.at(1).second.at(NO_DATA) << endl;
+	coefficient_list->output();
+	
+	// Substitute the coefficients back in to equation one to test the solution.
+	expression->test_solution(coefficient_list);
+	
+	// Extrapolate the price on for a future date.
+	coefficient_list->predict(NO_DATA + 1);
+	
+	// Save the coefficients to a csv for use by graphing script.
+	coefficient_list->save_coefficents();
+	//cout << "Actual: " << test.at(1).second.at(NO_DATA) << endl;
 	return 0;
 }

@@ -14,14 +14,14 @@
 	
 	using namespace std; 
 
-	#define NO_DATA 50
+	#define NO_DATA 70
 	#define NO_FUNC 21
 	
 	class dzvector
 {
 	// dzvectors should be NO_DATA in length
 	private:
-		long double *x;
+		long double *cursus;
 
 	public:
 		dzvector();
@@ -49,7 +49,7 @@
 	class forma
 	{
 		private: 
-			long double *x;
+			long double *aequare;
 
 		public:
 			forma();
@@ -62,6 +62,7 @@
 			void output_matrix();
 			void test_solution(endodatio*);
 			void output();
+			void initialize();
 	};
 	
 	std::vector<std::pair<std::string, std::vector<long double>>> read_csv(std::string );

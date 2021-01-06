@@ -26,7 +26,7 @@ with open('coefficients.csv') as csv_file:
 	csv_reader = csv.reader(csv_file, delimiter=',')
 	for coefficients in csv_reader:
 		i = 0
-	print("number of coefficients = {0}".format(len(coefficients)))
+	#print("number of coefficients = {0}".format(len(coefficients)))
 	
 with open('copper4.csv') as csv_file:
 	csv_reader = csv.reader(csv_file, delimiter=',')
@@ -34,13 +34,14 @@ with open('copper4.csv') as csv_file:
 
 	for row in csv_reader:
 		if line_count == 0:
-			print('{0}'.format(", ".join(row)))
+			pass
+			#print('{0}'.format(", ".join(row)))
 		else:
 			time_index = float(row[0])
 			price_element = float(row[1])
-			print('{0}, {1}'.format(time_index, price_element))
+			#print('{0}, {1}'.format(time_index, price_element))
 
-			if time_index < 50.0:
+			if time_index < 70.0:
 				time_seq1.append(float(time_index))
 				price_seq.append(price_element)
 
@@ -50,15 +51,19 @@ with open('copper4.csv') as csv_file:
 			for factor in coefficients:
 				fit_y = fit_y + float(factor) * pow(e1,index)
 				index = index + 1
-			print(fit_y)
+			#print(fit_y)
 			fit_price_seq.append(fit_y)
 			time_seq2.append(time_index)
 		line_count += 1
-		if line_count > 50:
+
+		if line_count >= 70:
 			break
 
 fig, ax = plt.subplots()
 plt.plot(time_seq1, price_seq, 'o-', color='black', label='Copper Market Data')
 plt.plot(time_seq2, fit_price_seq, 'o-', color='blue', label='Fitted Curve {0}th Degree Polynomial'.format(len(coefficients)))
-legend = ax.legend(loc='upper center', shadow=True, fontsize='x-large')
+legend = ax.legend(loc='lower left', shadow=True, fontsize='x-large')
+plt.title("Daily Copper Close Price", fontsize=26, fontweight='bold')
+plt.xlabel("Days from 01/03/2012", fontsize=18, fontweight='bold')
+plt.ylabel("Price ($/kg)", fontsize=18, fontweight='bold')
 plt.savefig("price.png")
